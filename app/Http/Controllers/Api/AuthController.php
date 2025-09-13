@@ -70,6 +70,20 @@ class AuthController extends Controller
      *         description="User registered successfully",
      *         @OA\JsonContent(
      *             @OA\Property(property="message", type="string", example="User registered successfully"),
+     *             @OA\Property(
+     *                  property="data",
+     *                  type="object",
+     *                  @OA\Property(
+     *                      property="user",
+     *                      type="object",
+     *                      @OA\Property(property="id", type="integer", example=1),
+     *                      @OA\Property(property="name", type="string", example="John Doe"),
+     *                      @OA\Property(property="email", type="string", example="john.doe@example.com"),
+     *                      @OA\Property(property="email_verified_at", type="string", format="date-time", nullable=true, example=null),
+     *                      @OA\Property(property="created_at", type="string", format="date-time", example="2024-01-15T10:30:00.000000Z"),
+     *                      @OA\Property(property="updated_at", type="string", format="date-time", example="2024-01-15T10:30:00.000000Z")
+     *                  )
+     *              )
      *         )
      *     ),
      *     @OA\Response(
@@ -125,6 +139,101 @@ class AuthController extends Controller
         }
     }
 
+    /**
+     * @OA\Post(
+     *     path="/api/login",
+     *     summary="User Login",
+     *     description="Login user with email and password",
+     *     operationId="loginUser",
+     *     tags={"Authentication"},
+     *     @OA\RequestBody(
+     *         required=true,
+     *         description="User login credentials",
+     *         @OA\JsonContent(
+     *             required={"email", "password"},
+     *             @OA\Property(
+     *                 property="email",
+     *                 type="string",
+     *                 format="email",
+     *                 description="User's email address",
+     *                 example="email@email.com"
+     *             ),
+     *             @OA\Property(
+     *                 property="password",
+     *                 type="string",
+     *                 minLength=6,
+     *                 format="password",
+     *                 description="User's password (minimum 6 characters)",
+     *                 example="password123"
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=200,
+     *         description="Login successful",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="messages.login.success"),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="data",
+     *                     type="object",
+     *                     @OA\Property(
+     *                         property="user",
+     *                         type="object",
+     *                         @OA\Property(property="id", type="integer", example=1),
+     *                         @OA\Property(property="name", type="string", example="David"),
+     *                         @OA\Property(property="email", type="string", example="email@email.com"),
+     *                         @OA\Property(property="created_at", type="string", format="date-time", example="2025-09-13T13:02:48.000000Z")
+     *                     ),
+     *                     @OA\Property(property="token", type="string", example="6|3OAgigLYuX8y8HfgizsxTWaj2JL4tQ1OzueaXaX7784f0797")
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=401,
+     *         description="Invalid credentials",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Invalid credentials")
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="message", type="string", example="The given data was invalid."),
+     *             @OA\Property(
+     *                 property="errors",
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="email",
+     *                     type="array",
+     *                     @OA\Items(type="string"),
+     *                     example={"The email field is required.", "The email must be a valid email address."}
+     *                 ),
+     *                 @OA\Property(
+     *                     property="password",
+     *                     type="array",
+     *                     @OA\Items(type="string"),
+     *                     example={"The password field is required.", "The password must be at least 6 characters."}
+     *                 )
+     *             )
+     *         )
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal server error",
+     *         @OA\JsonContent(
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Internal server error")
+     *         )
+     *     )
+     * )
+     */
     public function login(LoginRequest $request)
     {
         try {
@@ -140,7 +249,7 @@ class AuthController extends Controller
             ], 'messages.login.success');
 
         } catch (ValidationException $e) {
-            return $this->errorResponse('messages.login.invalid_credentials', '', 422);
+            return $this->errorResponse('messages.login.invalid_credentials', '', 401);
         } catch (\Exception $e) {
             return $this->errorResponse('messages.general.error');
         }
