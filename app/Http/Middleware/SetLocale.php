@@ -13,7 +13,7 @@ class SetLocale
 
         $supportedLocales = ['en', 'ka'];
 
-        if (!in_array($locale, $supportedLocales)) {
+        if (! in_array($locale, $supportedLocales)) {
             $locale = 'en';
         }
 

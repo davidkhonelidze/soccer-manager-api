@@ -9,7 +9,6 @@ namespace App\Http\Controllers;
  *     description="Laravel API Documentation with Laravel Sanctum Authentication"
  * )
  *
- *
  * @OA\SecurityScheme(
  *     securityScheme="sanctum",
  *     type="http",

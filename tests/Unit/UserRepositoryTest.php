@@ -2,9 +2,7 @@
 
 use App\Models\User;
 use App\Repositories\UserRepository;
-use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
-
 
 describe('UserRepository', function () {
     it('creates a new user', function () {
@@ -80,7 +78,7 @@ describe('UserRepository', function () {
     it('creates a user with long email address', function () {
         $repository = new UserRepository(new User());
 
-        $longEmail = str_repeat('a', 238) . '@example.com';
+        $longEmail = str_repeat('a', 238).'@example.com';
         $userData = [
             'name' => 'Test User',
             'email' => $longEmail,

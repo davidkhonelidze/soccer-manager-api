@@ -26,8 +26,8 @@ describe('User Registration', function () {
                         'name',
                         'email',
                         'created_at',
-                    ]
-                ]
+                    ],
+                ],
             ])
             ->assertJson([
                 'message' => 'User registered successfully',
@@ -35,8 +35,8 @@ describe('User Registration', function () {
                     'user' => [
                         'name' => 'John Doe',
                         'email' => 'john.doe@example.com',
-                    ]
-                ]
+                    ],
+                ],
             ]);
 
         // Verify user was created in database
@@ -121,7 +121,7 @@ describe('User Registration', function () {
     it('returns validation error when email is too long', function () {
         $userData = [
             'name' => 'John Doe',
-            'email' => str_repeat('a', 250) . '@example.com',
+            'email' => str_repeat('a', 250).'@example.com',
             'password' => 'MyP@ssw0rd123',
             'password_confirmation' => 'MyP@ssw0rd123',
         ];
@@ -332,7 +332,7 @@ describe('User Registration', function () {
         foreach ($testCases as $testCase) {
             $userData = [
                 'name' => $testCase['name'],
-                'email' => 'test' . uniqid() . '@example.com',
+                'email' => 'test'.uniqid().'@example.com',
                 'password' => 'MyP@ssw0rd123',
                 'password_confirmation' => 'MyP@ssw0rd123',
             ];
@@ -346,7 +346,7 @@ describe('User Registration', function () {
     it('handles registration with edge case emails', function () {
         $testCases = [
             ['email' => 'a@b.co', 'description' => 'minimum valid email'],
-            ['email' => str_repeat('a', 238) . '@example.com', 'description' => 'maximum length email'],
+            ['email' => str_repeat('a', 238).'@example.com', 'description' => 'maximum length email'],
             ['email' => 'test+tag@example.com', 'description' => 'email with plus sign'],
             ['email' => 'test.email@example.com', 'description' => 'email with dot'],
         ];

@@ -27,8 +27,8 @@ describe('Registration Integration Tests', function () {
                         'name',
                         'email',
                         'created_at',
-                    ]
-                ]
+                    ],
+                ],
             ]);
 
         // Assert response content
@@ -142,7 +142,7 @@ describe('Registration Integration Tests', function () {
     it('handles registration with maximum length fields', function () {
         $userData = [
             'name' => str_repeat('A', 255),
-            'email' => str_repeat('a', 238) . '@example.com',
+            'email' => str_repeat('a', 238).'@example.com',
             'password' => 'MyP@ssw0rd123',
             'password_confirmation' => 'MyP@ssw0rd123',
         ];
@@ -214,7 +214,7 @@ describe('Registration Integration Tests', function () {
         foreach ($weakPasswords as $password) {
             $userData = [
                 'name' => 'Test User',
-                'email' => 'test' . uniqid() . '@example.com',
+                'email' => 'test'.uniqid().'@example.com',
                 'password' => $password,
                 'password_confirmation' => $password,
             ];
@@ -224,8 +224,8 @@ describe('Registration Integration Tests', function () {
             $response->assertStatus(422)
                 ->assertJson([
                     'errors' => [
-                        'password' => []
-                    ]
+                        'password' => [],
+                    ],
                 ]);
         }
     });
@@ -253,8 +253,8 @@ describe('Registration Integration Tests', function () {
             $response->assertStatus(422)
                 ->assertJson([
                     'errors' => [
-                        'email' => []
-                    ]
+                        'email' => [],
+                    ],
                 ]);
         }
     });
@@ -275,8 +275,8 @@ describe('Registration Integration Tests', function () {
         $response->assertStatus(422)
             ->assertJson([
                 'errors' => [
-                    'email' => []
-                ]
+                    'email' => [],
+                ],
             ]);
     });
 
