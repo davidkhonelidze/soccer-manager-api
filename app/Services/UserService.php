@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Repositories\Interfaces\UserRepositoryinterface;
 use App\Services\Interfaces\UserServiceInterface;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 
 class UserService implements UserServiceInterface
 {
@@ -26,5 +27,23 @@ class UserService implements UserServiceInterface
         } catch (\Exception $e) {
 
         }
+    }
+
+    public function login(string $email, string $password): array
+    {
+        $user = $this->repository->findByEmail($email);
+
+        if (!$user || !Hash::check($password, $user->password)) {
+            throw ValidationException::withMessages([
+                'email' => ['The provided credentials are incorrect.'],
+            ]);
+        }
+
+        $token = $user->createToken('auth-token')->plainTextToken;
+
+        return [
+            'user' => $user,
+            'token' => $token,
+        ];
     }
 }
