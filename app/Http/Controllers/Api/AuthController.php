@@ -9,16 +9,12 @@ use App\Http\Resources\UserResource;
 use App\Services\Interfaces\UserServiceInterface;
 use App\Traits\ApiResponse;
 use Illuminate\Validation\ValidationException;
-use Symfony\Component\HttpFoundation\ParameterBag;
 
 class AuthController extends Controller
 {
     use ApiResponse;
 
-    public function __construct(private UserServiceInterface $userService)
-    {
-
-    }
+    public function __construct(private UserServiceInterface $userService) {}
 
     /**
      * @OA\Post(
@@ -27,11 +23,14 @@ class AuthController extends Controller
      *     description="Register a new user account",
      *     operationId="registerUser",
      *     tags={"Authentication"},
+     *
      *     @OA\RequestBody(
      *         required=true,
      *         description="User registration data",
+     *
      *         @OA\JsonContent(
      *             required={"name", "email", "password", "password_confirmation"},
+     *
      *             @OA\Property(
      *                 property="name",
      *                 type="string",
@@ -65,10 +64,13 @@ class AuthController extends Controller
      *             )
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=201,
      *         description="User registered successfully",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="message", type="string", example="User registered successfully"),
      *             @OA\Property(
      *                  property="data",
@@ -86,10 +88,13 @@ class AuthController extends Controller
      *              )
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=422,
      *         description="Validation error",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="message", type="string", example="The given data was invalid."),
      *             @OA\Property(
      *                 property="errors",
@@ -97,28 +102,36 @@ class AuthController extends Controller
      *                 @OA\Property(
      *                     property="name",
      *                     type="array",
+     *
      *                     @OA\Items(type="string"),
      *                     example={"The name field is required.", "The name must be at least 2 characters."}
      *                 ),
+     *
      *                 @OA\Property(
      *                     property="email",
      *                     type="array",
+     *
      *                     @OA\Items(type="string"),
      *                     example={"The email field is required.", "The email must be a valid email address.", "The email has already been taken."}
      *                 ),
+     *
      *                 @OA\Property(
      *                     property="password",
      *                     type="array",
+     *
      *                     @OA\Items(type="string"),
      *                     example={"The password field is required.", "The password confirmation does not match.", "The password must contain at least one uppercase and one lowercase letter."}
      *                 )
      *             )
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=500,
      *         description="Internal server error",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="message", type="string", example="Internal server error")
      *         )
      *     )
@@ -146,11 +159,14 @@ class AuthController extends Controller
      *     description="Login user with email and password",
      *     operationId="loginUser",
      *     tags={"Authentication"},
+     *
      *     @OA\RequestBody(
      *         required=true,
      *         description="User login credentials",
+     *
      *         @OA\JsonContent(
      *             required={"email", "password"},
+     *
      *             @OA\Property(
      *                 property="email",
      *                 type="string",
@@ -168,10 +184,13 @@ class AuthController extends Controller
      *             )
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=200,
      *         description="Login successful",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="success", type="boolean", example=true),
      *             @OA\Property(property="message", type="string", example="messages.login.success"),
      *             @OA\Property(
@@ -193,18 +212,24 @@ class AuthController extends Controller
      *             )
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=401,
      *         description="Invalid credentials",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="success", type="boolean", example=false),
      *             @OA\Property(property="message", type="string", example="Invalid credentials")
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=422,
      *         description="Validation error",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="message", type="string", example="The given data was invalid."),
      *             @OA\Property(
      *                 property="errors",
@@ -212,22 +237,28 @@ class AuthController extends Controller
      *                 @OA\Property(
      *                     property="email",
      *                     type="array",
+     *
      *                     @OA\Items(type="string"),
      *                     example={"The email field is required.", "The email must be a valid email address."}
      *                 ),
+     *
      *                 @OA\Property(
      *                     property="password",
      *                     type="array",
+     *
      *                     @OA\Items(type="string"),
      *                     example={"The password field is required.", "The password must be at least 6 characters."}
      *                 )
      *             )
      *         )
      *     ),
+     *
      *     @OA\Response(
      *         response=500,
      *         description="Internal server error",
+     *
      *         @OA\JsonContent(
+     *
      *             @OA\Property(property="success", type="boolean", example=false),
      *             @OA\Property(property="message", type="string", example="Internal server error")
      *         )
