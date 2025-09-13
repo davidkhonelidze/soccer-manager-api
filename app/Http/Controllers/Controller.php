@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 /**
  * @OA\Info(
- *     title="My Laravel API",
+ *     title="Soccer Manager API",
  *     version="1.0.0",
  *     description="Laravel API Documentation with Laravel Sanctum Authentication"
  * )
