@@ -2,10 +2,12 @@
 
 namespace App\Services;
 
+use App\Aggregates\TeamAggregate;
 use App\Models\Team;
 use App\Repositories\Interfaces\TeamRepositoryInterface;
 use App\Services\Interfaces\PlayerServiceInterface;
 use App\Services\Interfaces\TeamServiceInterface;
+use Illuminate\Support\Str;
 
 class TeamService implements TeamServiceInterface
 {
@@ -14,7 +16,17 @@ class TeamService implements TeamServiceInterface
 
     public function createTeam(array $data): Team
     {
-        return Team::factory()->create();
+        $teamUuid = Str::uuid()->toString();
+
+        $initialBalance = config('soccer.team.initial_balance');
+
+        // Event Sourcing-ით team შექმნა
+        TeamAggregate::retrieve($teamUuid)
+            ->createTeam()
+            ->allocateInitialFunds($initialBalance)
+            ->persist();
+
+        return Team::findByUuid($teamUuid);
     }
 
     public function populateTeamWithPlayers(int $team_id)
