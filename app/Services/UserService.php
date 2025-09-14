@@ -4,24 +4,33 @@ namespace App\Services;
 
 use App\Models\User;
 use App\Repositories\Interfaces\UserRepositoryinterface;
+use App\Services\Interfaces\TeamServiceInterface;
 use App\Services\Interfaces\UserServiceInterface;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
 class UserService implements UserServiceInterface
 {
-    public function __construct(private UserRepositoryinterface $repository) {}
+    public function __construct(private UserRepositoryinterface $repository,
+        private TeamServiceInterface $teamService) {}
 
     public function register(array $data): User
     {
         try {
-            $data['password'] = Hash::make($data['password']);
+            return DB::transaction(function () use ($data) {
+                $data['password'] = Hash::make($data['password']);
 
-            $user = $this->repository->create($data);
+                $team = $this->teamService->createTeam([]);
 
-            return $user;
+                $data['team_id'] = $team->id;
+
+                $this->teamService->populateTeamWithPlayers($data['team_id']);
+
+                return $this->repository->create($data);
+            });
         } catch (\Exception $e) {
-
+            echo $e->getMessage();
         }
     }
 
