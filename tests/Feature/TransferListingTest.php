@@ -1,9 +1,9 @@
 <?php
 
-use App\Models\User;
-use App\Models\Team;
 use App\Models\Player;
+use App\Models\Team;
 use App\Models\TransferListing;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 
