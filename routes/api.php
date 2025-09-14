@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AuthController;
 use App\Http\Controllers\Api\CountryController;
+use App\Http\Controllers\Api\TransferController;
 use App\Http\Controllers\Api\TransferListingController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -19,4 +20,5 @@ Route::get('/transfer-listings', [TransferListingController::class, 'index']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/transfer-listings', [TransferListingController::class, 'store']);
+    Route::post('/transfer/purchase/{player}', [TransferController::class, 'purchasePlayer']);
 });

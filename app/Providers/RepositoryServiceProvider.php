@@ -17,10 +17,12 @@ use App\Services\Interfaces\CountryServiceInterface;
 use App\Services\Interfaces\PlayerServiceInterface;
 use App\Services\Interfaces\TeamServiceInterface;
 use App\Services\Interfaces\TransferListingServiceInterface;
+use App\Services\Interfaces\TransferServiceInterface;
 use App\Services\Interfaces\UserServiceInterface;
 use App\Services\PlayerService;
 use App\Services\TeamService;
 use App\Services\TransferListingService;
+use App\Services\TransferService;
 use App\Services\UserService;
 use Carbon\Laravel\ServiceProvider;
 
@@ -33,6 +35,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(TeamServiceInterface::class, TeamService::class);
         $this->app->bind(PlayerServiceInterface::class, PlayerService::class);
         $this->app->bind(TransferListingServiceInterface::class, TransferListingService::class);
+        $this->app->bind(TransferServiceInterface::class, TransferService::class);
 
         $this->app->bind(UserRepositoryInterface::class, UserRepository::class);
         $this->app->bind(CountryRepositoryInterface::class, CountryRepository::class);

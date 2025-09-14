@@ -519,6 +519,214 @@
                 }
             }
         },
+        "/api/transfer/purchase/{player}": {
+            "post": {
+                "tags": [
+                    "Transfers"
+                ],
+                "summary": "Purchase Player",
+                "description": "Purchase a player from the transfer market",
+                "operationId": "purchasePlayer",
+                "parameters": [
+                    {
+                        "name": "player",
+                        "in": "path",
+                        "description": "ID of the player to purchase",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "example": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Player purchased successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Player purchased successfully"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "player": {
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "first_name": {
+                                                            "type": "string",
+                                                            "example": "John"
+                                                        },
+                                                        "last_name": {
+                                                            "type": "string",
+                                                            "example": "Doe"
+                                                        },
+                                                        "position": {
+                                                            "type": "string",
+                                                            "example": "midfielder"
+                                                        },
+                                                        "team_id": {
+                                                            "type": "integer",
+                                                            "example": 2
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "buying_team": {
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer",
+                                                            "example": 2
+                                                        },
+                                                        "name": {
+                                                            "type": "string",
+                                                            "example": "Team Beta"
+                                                        },
+                                                        "balance": {
+                                                            "type": "number",
+                                                            "format": "float",
+                                                            "example": 4000000
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "selling_team": {
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "name": {
+                                                            "type": "string",
+                                                            "example": "Team Alpha"
+                                                        },
+                                                        "balance": {
+                                                            "type": "number",
+                                                            "format": "float",
+                                                            "example": 6000000
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                },
+                                                "transfer_fee": {
+                                                    "type": "number",
+                                                    "format": "float",
+                                                    "example": 1000000
+                                                },
+                                                "transfer_uuid": {
+                                                    "type": "string",
+                                                    "example": "550e8400-e29b-41d4-a716-446655440000"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request - Transfer validation failed",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Insufficient funds for transfer."
+                                        },
+                                        "errors": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Player not found or not available for transfer",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Player is not available for transfer."
+                                        },
+                                        "errors": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "401": {
+                        "description": "Unauthorized",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Unauthenticated."
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Internal server error"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
+        },
         "/api/transfer-listings": {
             "get": {
                 "tags": [
@@ -536,18 +744,6 @@
                         "schema": {
                             "type": "integer",
                             "default": 1,
-                            "minimum": 1
-                        }
-                    },
-                    {
-                        "name": "per_page",
-                        "in": "query",
-                        "description": "Number of items per page",
-                        "required": false,
-                        "schema": {
-                            "type": "integer",
-                            "default": 15,
-                            "maximum": 100,
                             "minimum": 1
                         }
                     }
@@ -932,6 +1128,10 @@
         {
             "name": "Countries",
             "description": "Countries"
+        },
+        {
+            "name": "Transfers",
+            "description": "Transfers"
         },
         {
             "name": "Transfer Listings",
