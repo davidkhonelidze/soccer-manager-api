@@ -2,12 +2,24 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class Player extends Model
 {
     use HasFactory;
+
+    protected $casts = [
+        'date_of_birth' => 'date',
+    ];
+
+    protected function age(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->date_of_birth?->age ?? 0
+        );
+    }
 
     public function team()
     {

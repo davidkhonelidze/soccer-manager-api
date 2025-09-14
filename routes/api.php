@@ -15,6 +15,8 @@ Route::post('/login', [AuthController::class, 'login']);
 
 Route::get('/countries', [CountryController::class, 'index']);
 
+Route::get('/transfer-listings', [TransferListingController::class, 'index']);
+
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/transfer-listings', [TransferListingController::class, 'store']);
 });

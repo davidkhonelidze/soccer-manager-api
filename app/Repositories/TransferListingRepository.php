@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Models\TransferListing;
 use App\Repositories\Interfaces\TransferListingRepositoryInterface;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class TransferListingRepository implements TransferListingRepositoryInterface
 {
@@ -22,5 +23,17 @@ class TransferListingRepository implements TransferListingRepositoryInterface
             ->where('player_id', $playerId)
             ->where('status', 'active')
             ->first();
+    }
+
+    public function paginate(): LengthAwarePaginator
+    {
+        $perPage = config('soccer.pagination.transfer_listings_per_page', 15);
+
+        return $this->model
+            ->with(['player', 'sellingTeam'])
+            ->where('status', 'active')
+            ->whereNotNull('unique_key')
+            ->orderBy('created_at', 'desc')
+            ->paginate($perPage);
     }
 }

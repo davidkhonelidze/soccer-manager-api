@@ -21,7 +21,7 @@ class Team extends Model
     {
         parent::boot();
         static::creating(function ($team) {
-            if (!$team->uuid) {
+            if (! $team->uuid) {
                 $team->uuid = Str::uuid();
             }
         });

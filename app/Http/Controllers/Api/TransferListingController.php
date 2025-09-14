@@ -19,6 +19,100 @@ class TransferListingController extends Controller
     ) {}
 
     /**
+     * @OA\Get(
+     *     path="/api/transfer-listings",
+     *     summary="Get Transfer Listings",
+     *     description="Returns paginated list of transfer listings with player and team information",
+     *     operationId="getTransferListings",
+     *     tags={"Transfer Listings"},
+     *
+     *     @OA\Parameter(
+     *         name="page",
+     *         in="query",
+     *         description="Page number for pagination",
+     *         required=false,
+     *
+     *         @OA\Schema(
+     *             type="integer",
+     *             default=1,
+     *             minimum=1
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=200,
+     *         description="Successful operation",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="array",
+     *
+     *                 @OA\Items(
+     *
+     *                     @OA\Property(property="id", type="integer", example=1),
+     *                     @OA\Property(property="player_id", type="integer", example=1),
+     *                     @OA\Property(property="selling_team_id", type="integer", example=1),
+     *                     @OA\Property(property="asking_price", type="number", format="float", example=1000000.50),
+     *                     @OA\Property(property="status", type="string", example="active"),
+     *                     @OA\Property(property="unique_key", type="string", example="active"),
+     *                     @OA\Property(property="created_at", type="string", format="date-time", example="2024-01-15T10:30:00.000000Z"),
+     *                     @OA\Property(property="updated_at", type="string", format="date-time", example="2024-01-15T10:30:00.000000Z")
+     *                 )
+     *             ),
+     *             @OA\Property(
+     *                 property="links",
+     *                 type="object",
+     *                 @OA\Property(property="first", type="string", example="http://127.0.0.1/api/transfer-listings?page=1"),
+     *                 @OA\Property(property="last", type="string", example="http://127.0.0.1/api/transfer-listings?page=1"),
+     *                 @OA\Property(property="prev", type="string", nullable=true, example=null),
+     *                 @OA\Property(property="next", type="string", nullable=true, example=null)
+     *             ),
+     *             @OA\Property(
+     *                 property="meta",
+     *                 type="object",
+     *                 @OA\Property(property="current_page", type="integer", example=1),
+     *                 @OA\Property(property="from", type="integer", example=1),
+     *                 @OA\Property(property="last_page", type="integer", example=1),
+     *                 @OA\Property(
+     *                     property="links",
+     *                     type="array",
+     *
+     *                     @OA\Items(
+     *
+     *                         @OA\Property(property="url", type="string", nullable=true),
+     *                         @OA\Property(property="label", type="string"),
+     *                         @OA\Property(property="page", type="integer", nullable=true),
+     *                         @OA\Property(property="active", type="boolean")
+     *                     )
+     *                 ),
+     *                 @OA\Property(property="path", type="string", example="http://127.0.0.1/api/transfer-listings"),
+     *                 @OA\Property(property="per_page", type="integer", example=15),
+     *                 @OA\Property(property="to", type="integer", example=3),
+     *                 @OA\Property(property="total", type="integer", example=3)
+     *             )
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=400,
+     *         description="Bad request"
+     *     ),
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal server error"
+     *     )
+     * )
+     */
+    public function index()
+    {
+        $result = $this->transferListingService->getPaginatedTransferListings();
+
+        return TransferListingResource::collection($result);
+    }
+
+    /**
      * @OA\Post(
      *     path="/api/transfer-listings",
      *     summary="List Player for Transfer",

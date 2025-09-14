@@ -7,6 +7,7 @@ use App\Models\TransferListing;
 use App\Repositories\Interfaces\TransferListingRepositoryInterface;
 use App\Services\Interfaces\PlayerServiceInterface;
 use App\Services\Interfaces\TransferListingServiceInterface;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\DB;
 
@@ -44,5 +45,10 @@ class TransferListingService implements TransferListingServiceInterface
 
             return $this->transferListingRepository->create($listingData);
         });
+    }
+
+    public function getPaginatedTransferListings(): LengthAwarePaginator
+    {
+        return $this->transferListingRepository->paginate();
     }
 }

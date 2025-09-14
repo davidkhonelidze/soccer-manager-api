@@ -19,10 +19,22 @@ class TransferListingResource extends JsonResource
             'player_id' => $this->player_id,
             'selling_team_id' => $this->selling_team_id,
             'asking_price' => $this->asking_price,
-            'status' => $this->status,
-            'unique_key' => $this->unique_key,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'player' => $this->whenLoaded('player', function () {
+                return [
+                    'id' => $this->player->id,
+                    'name' => $this->player->name,
+                    'position' => $this->player->position,
+                    'age' => $this->player->age,
+                ];
+            }),
+            'selling_team' => $this->whenLoaded('sellingTeam', function () {
+                return [
+                    'id' => $this->sellingTeam->id,
+                    'name' => $this->sellingTeam->name,
+                ];
+            }),
         ];
     }
 }
