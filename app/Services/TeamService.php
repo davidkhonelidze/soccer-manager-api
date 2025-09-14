@@ -29,7 +29,7 @@ class TeamService implements TeamServiceInterface
         return Team::findByUuid($teamUuid);
     }
 
-    public function populateTeamWithPlayers(int $team_id)
+    public function populateTeamWithPlayers(int $team_id): void
     {
         $positions = config('soccer.team.positions');
         foreach ($positions as $position => $values) {
