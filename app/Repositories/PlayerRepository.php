@@ -11,5 +11,4 @@ class PlayerRepository implements PlayerRepositoryInterface
         protected Player $model
     ) {}
 
-
 }

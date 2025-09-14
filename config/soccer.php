@@ -20,5 +20,5 @@ return [
     ],
     'player' => [
         'initial_value' => env('SOCCER_PLAYER_INITIAL_VALUE', 1000000),
-    ]
+    ],
 ];
