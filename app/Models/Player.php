@@ -10,6 +10,16 @@ class Player extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'first_name',
+        'last_name',
+        'date_of_birth',
+        'position',
+        'country_id',
+        'team_id',
+        'value',
+    ];
+
     protected $casts = [
         'date_of_birth' => 'date',
     ];

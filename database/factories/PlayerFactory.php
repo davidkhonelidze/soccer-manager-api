@@ -18,10 +18,13 @@ class PlayerFactory extends Factory
     public function definition(): array
     {
         $countries = Country::all()->pluck('id');
+        $positions = array_keys(config('soccer.team.positions'));
+        
         return [
             'first_name' => $this->faker->firstName,
             'last_name' => $this->faker->lastName,
             'date_of_birth' => $this->faker->dateTimeBetween('-40 years', '-18 years')->format('Y-m-d'),
+            'position' => $this->faker->randomElement($positions),
             'country_id' => $this->faker->randomElement($countries),
         ];
     }
