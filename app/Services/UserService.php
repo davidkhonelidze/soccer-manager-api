@@ -30,7 +30,7 @@ class UserService implements UserServiceInterface
                 return $this->repository->create($data);
             });
         } catch (\Exception $e) {
-            echo $e->getMessage();
+            throw $e;
         }
     }
 

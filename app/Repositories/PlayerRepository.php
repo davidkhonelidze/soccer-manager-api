@@ -11,4 +11,8 @@ class PlayerRepository implements PlayerRepositoryInterface
         protected Player $model
     ) {}
 
+    public function find(int $id): ?Player
+    {
+        return $this->model->find($id);
+    }
 }

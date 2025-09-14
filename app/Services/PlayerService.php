@@ -17,4 +17,9 @@ class PlayerService implements PlayerServiceInterface
             'position' => $position,
         ]);
     }
+
+    public function get(int $id): ?Player
+    {
+        return $this->repository->find($id);
+    }
 }

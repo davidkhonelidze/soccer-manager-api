@@ -5,6 +5,9 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 
 uses(RefreshDatabase::class);
+beforeEach(function () {
+    $this->seed();
+});
 
 describe('Registration Integration Tests', function () {
     it('completes full registration flow with valid data', function () {

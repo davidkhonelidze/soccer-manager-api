@@ -11,11 +11,21 @@ class Player extends Model
 
     public function team()
     {
-        $this->belongsTo(Team::class);
+        return $this->belongsTo(Team::class);
     }
 
     public function country()
     {
         return $this->belongsTo(Country::class);
+    }
+
+    public function transferListings()
+    {
+        return $this->hasMany(TransferListing::class);
+    }
+
+    public function activeTransferListing()
+    {
+        return $this->hasOne(TransferListing::class)->where('status', 'active');
     }
 }

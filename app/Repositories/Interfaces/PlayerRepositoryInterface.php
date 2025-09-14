@@ -2,4 +2,9 @@
 
 namespace App\Repositories\Interfaces;
 
-interface PlayerRepositoryInterface {}
+use App\Models\Player;
+
+interface PlayerRepositoryInterface
+{
+    public function find(int $id): ?Player;
+}

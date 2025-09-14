@@ -518,6 +518,226 @@
                     }
                 }
             }
+        },
+        "/api/transfer-listings": {
+            "post": {
+                "tags": [
+                    "Transfer Listings"
+                ],
+                "summary": "List Player for Transfer",
+                "description": "Add a player to the transfer market",
+                "operationId": "createTransferListing",
+                "requestBody": {
+                    "description": "Transfer listing data",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "required": [
+                                    "player_id",
+                                    "asking_price"
+                                ],
+                                "properties": {
+                                    "player_id": {
+                                        "description": "ID of the player to list for transfer",
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "asking_price": {
+                                        "description": "Asking price for the player (minimum 1)",
+                                        "type": "number",
+                                        "format": "float",
+                                        "minimum": 1,
+                                        "example": 1000000.5
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Player listed for transfer successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Player listed for transfer successfully"
+                                        },
+                                        "data": {
+                                            "properties": {
+                                                "transfer_listing": {
+                                                    "properties": {
+                                                        "id": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "player_id": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "selling_team_id": {
+                                                            "type": "integer",
+                                                            "example": 1
+                                                        },
+                                                        "asking_price": {
+                                                            "type": "number",
+                                                            "format": "float",
+                                                            "example": 1000000.5
+                                                        },
+                                                        "status": {
+                                                            "type": "string",
+                                                            "example": "active"
+                                                        },
+                                                        "unique_key": {
+                                                            "type": "string",
+                                                            "example": "active"
+                                                        },
+                                                        "created_at": {
+                                                            "type": "string",
+                                                            "format": "date-time",
+                                                            "example": "2024-01-15T10:30:00.000000Z"
+                                                        },
+                                                        "updated_at": {
+                                                            "type": "string",
+                                                            "format": "date-time",
+                                                            "example": "2024-01-15T10:30:00.000000Z"
+                                                        }
+                                                    },
+                                                    "type": "object"
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad request - Player already listed or validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Player is already listed for transfer."
+                                        },
+                                        "errors": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Player not found or does not belong to user's team",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Player not found or does not belong to your team."
+                                        },
+                                        "errors": {
+                                            "type": "object",
+                                            "example": []
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "422": {
+                        "description": "Validation error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "The given data was invalid."
+                                        },
+                                        "errors": {
+                                            "properties": {
+                                                "player_id": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    },
+                                                    "example": [
+                                                        "The player id field is required.",
+                                                        "The selected player id is invalid."
+                                                    ]
+                                                },
+                                                "asking_price": {
+                                                    "type": "array",
+                                                    "items": {
+                                                        "type": "string"
+                                                    },
+                                                    "example": [
+                                                        "The asking price field is required.",
+                                                        "The asking price must be at least 1."
+                                                    ]
+                                                }
+                                            },
+                                            "type": "object"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Internal server error"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                },
+                "security": [
+                    {
+                        "sanctum": []
+                    }
+                ]
+            }
         }
     },
     "components": {
@@ -538,6 +758,10 @@
         {
             "name": "Countries",
             "description": "Countries"
+        },
+        {
+            "name": "Transfer Listings",
+            "description": "Transfer Listings"
         }
     ]
 }

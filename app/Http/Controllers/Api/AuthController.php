@@ -148,7 +148,7 @@ class AuthController extends Controller
             ], 'messages.registration.success', 201);
 
         } catch (\Exception $e) {
-            return $this->errorResponse('messages.registration.failed');
+            return $this->errorResponse($e->getMessage());
         }
     }
 

@@ -23,6 +23,7 @@ return new class extends Migration
             $table->index(['player_id', 'status']);
             $table->index('selling_team_id');
             $table->index('asking_price');
+            $table->unique(['player_id', 'status', 'unique_key']);
         });
     }
 
