@@ -5,6 +5,9 @@ use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Hash;
 
 uses(RefreshDatabase::class);
+beforeEach(function () {
+    $this->seed();
+});
 
 describe('User Registration', function () {
     it('can register a new user with valid data', function () {

@@ -15,4 +15,14 @@ class TeamRepository implements TeamRepositoryInterface
     {
         return $this->model->create($data);
     }
+
+    public function find(int $id): ?Team
+    {
+        return $this->model->find($id);
+    }
+
+    public function findByUuid(string $uuid): ?Team
+    {
+        return $this->model->findByUuid($uuid);
+    }
 }

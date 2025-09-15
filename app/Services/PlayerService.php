@@ -10,12 +10,16 @@ class PlayerService implements PlayerServiceInterface
 {
     public function __construct(private PlayerRepositoryInterface $repository) {}
 
-
     public function createPlayers(int $team_id, string $position, int $count = 1)
     {
         Player::factory($count)->create([
             'team_id' => $team_id,
             'position' => $position,
         ]);
+    }
+
+    public function get(int $id): ?Player
+    {
+        return $this->repository->find($id);
     }
 }

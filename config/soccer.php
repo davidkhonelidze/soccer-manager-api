@@ -20,5 +20,9 @@ return [
     ],
     'player' => [
         'initial_value' => env('SOCCER_PLAYER_INITIAL_VALUE', 1000000),
-    ]
+    ],
+    'pagination' => [
+        'transfer_listings_per_page' => env('SOCCER_TRANSFER_LISTINGS_PER_PAGE', 15),
+        'max_per_page' => env('SOCCER_MAX_PER_PAGE', 100),
+    ],
 ];

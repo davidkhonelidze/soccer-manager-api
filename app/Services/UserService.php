@@ -30,7 +30,7 @@ class UserService implements UserServiceInterface
                 return $this->repository->create($data);
             });
         } catch (\Exception $e) {
-            echo $e->getMessage();
+            throw $e;
         }
     }
 
@@ -50,5 +50,10 @@ class UserService implements UserServiceInterface
             'user' => $user,
             'token' => $token,
         ];
+    }
+
+    public function find(int $id): ?User
+    {
+        return $this->repository->find($id);
     }
 }
