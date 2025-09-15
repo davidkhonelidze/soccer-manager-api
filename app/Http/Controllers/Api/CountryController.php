@@ -18,6 +18,7 @@ class CountryController extends Controller
      *     summary="Get list of countries",
      *     description="Returns paginated list of countries with their ID, name and country code",
      *
+     *     @OA\Parameter(ref="#/components/parameters/Accept-Language"),
      *     @OA\Parameter(
      *         name="page",
      *         in="query",

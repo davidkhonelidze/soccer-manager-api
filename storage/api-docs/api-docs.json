@@ -14,6 +14,11 @@
                 "summary": "User Registration",
                 "description": "Register a new user account",
                 "operationId": "registerUser",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/Accept-Language"
+                    }
+                ],
                 "requestBody": {
                     "description": "User registration data",
                     "required": true,
@@ -195,6 +200,11 @@
                 "summary": "User Login",
                 "description": "Login user with email and password",
                 "operationId": "loginUser",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/Accept-Language"
+                    }
+                ],
                 "requestBody": {
                     "description": "User login credentials",
                     "required": true,
@@ -376,6 +386,9 @@
                 "operationId": "getCountries",
                 "parameters": [
                     {
+                        "$ref": "#/components/parameters/Accept-Language"
+                    },
+                    {
                         "name": "page",
                         "in": "query",
                         "description": "Page number for pagination",
@@ -528,6 +541,9 @@
                 "description": "Purchase a player from the transfer market",
                 "operationId": "purchasePlayer",
                 "parameters": [
+                    {
+                        "$ref": "#/components/parameters/Accept-Language"
+                    },
                     {
                         "name": "player",
                         "in": "path",
@@ -737,6 +753,9 @@
                 "operationId": "getTransferListings",
                 "parameters": [
                     {
+                        "$ref": "#/components/parameters/Accept-Language"
+                    },
+                    {
                         "name": "page",
                         "in": "query",
                         "description": "Page number for pagination",
@@ -897,6 +916,11 @@
                 "summary": "List Player for Transfer",
                 "description": "Add a player to the transfer market",
                 "operationId": "createTransferListing",
+                "parameters": [
+                    {
+                        "$ref": "#/components/parameters/Accept-Language"
+                    }
+                ],
                 "requestBody": {
                     "description": "Transfer listing data",
                     "required": true,
@@ -1111,6 +1135,22 @@
         }
     },
     "components": {
+        "parameters": {
+            "Accept-Language": {
+                "name": "Accept-Language",
+                "in": "header",
+                "description": "Language preference for API responses",
+                "required": false,
+                "schema": {
+                    "type": "string",
+                    "default": "en",
+                    "enum": [
+                        "en",
+                        "ka"
+                    ]
+                }
+            }
+        },
         "securitySchemes": {
             "sanctum": {
                 "type": "http",

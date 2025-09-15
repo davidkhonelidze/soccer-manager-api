@@ -16,6 +16,20 @@ namespace App\Http\Controllers;
  *     bearerFormat="token",
  *     description="Enter your Sanctum token (without 'Bearer ' prefix)"
  * )
+ *
+ * @OA\Parameter(
+ *     parameter="Accept-Language",
+ *     name="Accept-Language",
+ *     in="header",
+ *     description="Language preference for API responses",
+ *     required=false,
+ *
+ *     @OA\Schema(
+ *         type="string",
+ *         enum={"en", "ka"},
+ *         default="en"
+ *     )
+ * )
  * */
 abstract class Controller
 {

@@ -24,6 +24,8 @@ class AuthController extends Controller
      *     operationId="registerUser",
      *     tags={"Authentication"},
      *
+     *     @OA\Parameter(ref="#/components/parameters/Accept-Language"),
+     *
      *     @OA\RequestBody(
      *         required=true,
      *         description="User registration data",
@@ -159,6 +161,8 @@ class AuthController extends Controller
      *     description="Login user with email and password",
      *     operationId="loginUser",
      *     tags={"Authentication"},
+     *
+     *     @OA\Parameter(ref="#/components/parameters/Accept-Language"),
      *
      *     @OA\RequestBody(
      *         required=true,

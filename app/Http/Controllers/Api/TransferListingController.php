@@ -26,6 +26,7 @@ class TransferListingController extends Controller
      *     operationId="getTransferListings",
      *     tags={"Transfer Listings"},
      *
+     *     @OA\Parameter(ref="#/components/parameters/Accept-Language"),
      *     @OA\Parameter(
      *         name="page",
      *         in="query",
@@ -120,6 +121,8 @@ class TransferListingController extends Controller
      *     operationId="createTransferListing",
      *     tags={"Transfer Listings"},
      *     security={{"sanctum":{}}},
+     *
+     *     @OA\Parameter(ref="#/components/parameters/Accept-Language"),
      *
      *     @OA\RequestBody(
      *         required=true,

@@ -30,6 +30,7 @@ class TransferController extends Controller
      *     tags={"Transfers"},
      *     security={{"sanctum":{}}},
      *
+     *     @OA\Parameter(ref="#/components/parameters/Accept-Language"),
      *     @OA\Parameter(
      *         name="player",
      *         in="path",
