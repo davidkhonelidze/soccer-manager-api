@@ -14,11 +14,13 @@ use App\Repositories\TransferListingRepository;
 use App\Repositories\UserRepository;
 use App\Services\CountryService;
 use App\Services\Interfaces\CountryServiceInterface;
+use App\Services\Interfaces\PlayerAuthorizationServiceInterface;
 use App\Services\Interfaces\PlayerServiceInterface;
 use App\Services\Interfaces\TeamServiceInterface;
 use App\Services\Interfaces\TransferListingServiceInterface;
 use App\Services\Interfaces\TransferServiceInterface;
 use App\Services\Interfaces\UserServiceInterface;
+use App\Services\PlayerAuthorizationService;
 use App\Services\PlayerService;
 use App\Services\TeamService;
 use App\Services\TransferListingService;
@@ -34,6 +36,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(CountryServiceInterface::class, CountryService::class);
         $this->app->bind(TeamServiceInterface::class, TeamService::class);
         $this->app->bind(PlayerServiceInterface::class, PlayerService::class);
+        $this->app->bind(PlayerAuthorizationServiceInterface::class, PlayerAuthorizationService::class);
         $this->app->bind(TransferListingServiceInterface::class, TransferListingService::class);
         $this->app->bind(TransferServiceInterface::class, TransferService::class);
 

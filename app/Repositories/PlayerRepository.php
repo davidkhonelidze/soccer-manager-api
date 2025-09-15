@@ -13,6 +13,17 @@ class PlayerRepository implements PlayerRepositoryInterface
 
     public function find(int $id): ?Player
     {
-        return $this->model->find($id);
+        return $this->model->with('country')->find($id);
+    }
+
+    public function update(int $id, array $data): bool
+    {
+        $player = $this->model->find($id);
+
+        if (! $player) {
+            return false;
+        }
+
+        return $player->update($data);
     }
 }

@@ -17,6 +17,11 @@ class Team extends Model
         return $this->hasMany(Player::class);
     }
 
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
+
     protected static function boot()
     {
         parent::boot();

@@ -22,4 +22,25 @@ class PlayerService implements PlayerServiceInterface
     {
         return $this->repository->find($id);
     }
+
+    public function updatePlayer(int $playerId, int $teamId, array $data): Player
+    {
+        $player = $this->repository->find($playerId);
+
+        if (! $player) {
+            throw new \Exception('Player not found.');
+        }
+
+        if ($player->team_id !== $teamId) {
+            throw new \Exception('You can only update players from your own team.');
+        }
+
+        $updated = $this->repository->update($playerId, $data);
+
+        if (! $updated) {
+            throw new \Exception('Failed to update player.');
+        }
+
+        return $this->repository->find($playerId);
+    }
 }

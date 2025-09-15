@@ -18,10 +18,19 @@ class PlayerResource extends JsonResource
             'id' => $this->id,
             'first_name' => $this->first_name,
             'last_name' => $this->last_name,
+            'date_of_birth' => $this->date_of_birth,
             'position' => $this->position,
             'age' => $this->age,
-            'team_id' => $this->team_id,
             'value' => $this->value,
+            'team_id' => $this->team_id,
+            'country_id' => $this->country_id,
+            'country' => $this->whenLoaded('country', function () {
+                return [
+                    'id' => $this->country->id,
+                    'name' => $this->country->name,
+                    'code' => $this->country->code,
+                ];
+            }),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

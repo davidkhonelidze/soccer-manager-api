@@ -22,6 +22,7 @@ class Player extends Model
 
     protected $casts = [
         'date_of_birth' => 'date',
+        'value' => 'decimal:2',
     ];
 
     protected function age(): Attribute

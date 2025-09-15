@@ -16,6 +16,13 @@ return [
         'purchase_successful' => 'Player purchased successfully',
         'team_not_found' => 'Team not found',
     ],
+    'player' => [
+        'updated_successfully' => 'Player updated successfully',
+        'not_found' => 'Player not found',
+        'no_team' => 'You must be assigned to a team to update players',
+        'not_owned' => 'You can only update players from your own team',
+        'update_failed' => 'Failed to update player',
+    ],
     'general' => [
         'error' => 'Internal server error',
     ],

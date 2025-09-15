@@ -20,7 +20,7 @@ class TeamFactory extends Factory
         $countries = Country::all()->pluck('id');
         $suffixes = ['FC', 'United', 'City', 'Athletic', 'Rovers', 'Dynamo'];
         return [
-            'name' => $this->faker->word() . ' ' . $this->faker->randomElement($suffixes),
+            'name' => $this->faker->unique()->word() . ' ' . $this->faker->randomElement($suffixes),
             'country_id' => $this->faker->randomElement($countries),
         ];
     }
