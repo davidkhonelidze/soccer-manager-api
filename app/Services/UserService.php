@@ -51,4 +51,9 @@ class UserService implements UserServiceInterface
             'token' => $token,
         ];
     }
+
+    public function find(int $id): ?User
+    {
+        return $this->repository->find($id);
+    }
 }

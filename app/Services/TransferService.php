@@ -3,15 +3,20 @@
 namespace App\Services;
 
 use App\Aggregates\TransferAggregate;
-use App\Models\Player;
-use App\Models\Team;
 use App\Models\TransferListing;
+use App\Services\Interfaces\PlayerServiceInterface;
+use App\Services\Interfaces\TeamServiceInterface;
 use App\Services\Interfaces\TransferServiceInterface;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class TransferService implements TransferServiceInterface
 {
+    public function __construct(
+        private PlayerServiceInterface $playerService,
+        private TeamServiceInterface $teamService
+    ) {}
+
     public function purchasePlayer(int $playerId, string $buyerTeamUuid): array
     {
         return DB::transaction(function () use ($playerId, $buyerTeamUuid) {
@@ -27,15 +32,11 @@ class TransferService implements TransferServiceInterface
 
             $transferFee = $transferListing->asking_price;
 
-            // Immediately mark the transfer listing as "processing" to prevent other requests
-            // This prevents race conditions while the event sourcing process completes
             $transferListing->update([
                 'status' => 'processing',
                 'unique_key' => null, // Clear unique key to prevent conflicts
             ]);
 
-            // Execute the Event Sourcing transfer within the same transaction
-            // Spatie Event Sourcing handles nested transactions with savepoints
             $transferUuid = Str::uuid()->toString();
 
             TransferAggregate::retrieve($transferUuid)
@@ -44,10 +45,9 @@ class TransferService implements TransferServiceInterface
                 ->completeTransfer()
                 ->persist();
 
-            // Get updated player and team information
-            $player = Player::find($playerId);
-            $buyingTeam = Team::findByUuid($buyerTeamUuid);
-            $sellingTeam = Team::find($transferListing->selling_team_id);
+            $player = $this->playerService->get($playerId);
+            $buyingTeam = $this->teamService->findByUuid($buyerTeamUuid);
+            $sellingTeam = $this->teamService->find($transferListing->selling_team_id);
 
             return [
                 'player' => $player,

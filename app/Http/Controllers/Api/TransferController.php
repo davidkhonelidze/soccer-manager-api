@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\PurchasePlayerRequest;
 use App\Http\Resources\PlayerResource;
 use App\Http\Resources\TeamResource;
+use App\Services\Interfaces\TeamServiceInterface;
 use App\Services\Interfaces\TransferServiceInterface;
 use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
@@ -16,7 +17,8 @@ class TransferController extends Controller
     use ApiResponse;
 
     public function __construct(
-        private TransferServiceInterface $transferService
+        private TransferServiceInterface $transferService,
+        private TeamServiceInterface $teamService
     ) {}
 
     /**
@@ -131,7 +133,11 @@ class TransferController extends Controller
         try {
             $user = $request->user();
 
-            $team = \App\Models\Team::find($user->team_id);
+            if (! $user || ! $user->team_id) {
+                return $this->errorResponse('messages.transfer.team_not_found', [], 400);
+            }
+
+            $team = $this->teamService->find($user->team_id);
             if (! $team) {
                 return $this->errorResponse('messages.transfer.team_not_found', [], 400);
             }

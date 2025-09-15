@@ -11,8 +11,10 @@ use Illuminate\Support\Str;
 
 class TeamService implements TeamServiceInterface
 {
-    public function __construct(private TeamRepositoryInterface $repository,
-        private PlayerServiceInterface $playerService) {}
+    public function __construct(
+        private TeamRepositoryInterface $repository,
+        private PlayerServiceInterface $playerService
+    ) {}
 
     public function createTeam(array $data): Team
     {
@@ -35,5 +37,15 @@ class TeamService implements TeamServiceInterface
         foreach ($positions as $position => $values) {
             $this->playerService->createPlayers($team_id, $position, $values['default_count']);
         }
+    }
+
+    public function find(int $id): ?Team
+    {
+        return $this->repository->find($id);
+    }
+
+    public function findByUuid(string $uuid): ?Team
+    {
+        return $this->repository->findByUuid($uuid);
     }
 }
