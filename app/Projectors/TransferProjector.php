@@ -35,12 +35,19 @@ class TransferProjector extends Projector
 
     public function onPlayerTransferCompleted(PlayerTransferCompleted $event): void
     {
-        // Update player's team assignment
+        // Update player's team assignment and increase value
         $player = Player::find($event->playerId);
         if ($player) {
             $newTeam = Team::findByUuid($event->newTeamUuid);
             if ($newTeam) {
-                $player->update(['team_id' => $newTeam->id]);
+                // Calculate value increase (10-100% random increase)
+                $valueIncreasePercentage = $this->calculateValueIncrease();
+                $newValue = $player->value * (1 + $valueIncreasePercentage / 100);
+
+                $player->update([
+                    'team_id' => $newTeam->id,
+                    'value' => $newValue,
+                ]);
             }
         }
 
@@ -52,5 +59,16 @@ class TransferProjector extends Projector
                 'status' => 'sold',
                 'unique_key' => null,
             ]);
+    }
+
+    /**
+     * Calculate random value increase percentage between 10% and 100%
+     */
+    private function calculateValueIncrease(): float
+    {
+        $minIncrease = config('soccer.player.value_increase.min_percentage', 10);
+        $maxIncrease = config('soccer.player.value_increase.max_percentage', 100);
+
+        return mt_rand($minIncrease * 100, $maxIncrease * 100) / 100;
     }
 }

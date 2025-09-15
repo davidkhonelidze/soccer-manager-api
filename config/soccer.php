@@ -20,6 +20,10 @@ return [
     ],
     'player' => [
         'initial_value' => env('SOCCER_PLAYER_INITIAL_VALUE', 1000000),
+        'value_increase' => [
+            'min_percentage' => env('SOCCER_PLAYER_VALUE_INCREASE_MIN', 10),
+            'max_percentage' => env('SOCCER_PLAYER_VALUE_INCREASE_MAX', 100),
+        ],
     ],
     'pagination' => [
         'transfer_listings_per_page' => env('SOCCER_TRANSFER_LISTINGS_PER_PAGE', 15),
