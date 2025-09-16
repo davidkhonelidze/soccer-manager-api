@@ -144,13 +144,10 @@ The transfer system uses event sourcing to ensure data consistency and provide a
 
 #### Environment Variables
 ```env
-# Database
-DB_CONNECTION=mysql
-DB_HOST=mysql
-DB_PORT=3306
-
-# Soccer-specific settings
+# Team settings
 SOCCER_TEAM_INITIAL_BALANCE=5000000
+
+# Player settings
 SOCCER_PLAYER_INITIAL_VALUE=1000000
 SOCCER_PLAYER_VALUE_INCREASE_MIN=10
 SOCCER_PLAYER_VALUE_INCREASE_MAX=100
@@ -161,7 +158,7 @@ SOCCER_POSITION_DEFENDER_COUNT=6
 SOCCER_POSITION_MIDFIELDER_COUNT=6
 SOCCER_POSITION_ATTACKER_COUNT=5
 
-# Pagination
+# Pagination settings
 SOCCER_TRANSFER_LISTINGS_PER_PAGE=15
 SOCCER_PLAYERS_PER_PAGE=20
 SOCCER_MAX_PER_PAGE=100
