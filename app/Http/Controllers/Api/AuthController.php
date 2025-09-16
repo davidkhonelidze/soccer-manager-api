@@ -8,6 +8,7 @@ use App\Http\Requests\RegisterRequest;
 use App\Http\Resources\UserResource;
 use App\Services\Interfaces\UserServiceInterface;
 use App\Traits\ApiResponse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
@@ -287,6 +288,109 @@ class AuthController extends Controller
             return $this->errorResponse('messages.login.invalid_credentials', '', 401);
         } catch (\Exception $e) {
             return $this->errorResponse('messages.general.error');
+        }
+    }
+
+    /**
+     * @OA\Get(
+     *     path="/api/me",
+     *     summary="Get Current User Information",
+     *     description="Get the authenticated user's information including team details",
+     *     operationId="getCurrentUser",
+     *     tags={"Authentication"},
+     *     security={{"sanctum":{}}},
+     *
+     *     @OA\Parameter(ref="#/components/parameters/Accept-Language"),
+     *
+     *     @OA\Response(
+     *         response=200,
+     *         description="User information retrieved successfully",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="User information retrieved successfully"),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 @OA\Property(property="id", type="integer", example=1),
+     *                 @OA\Property(property="name", type="string", example="John Doe"),
+     *                 @OA\Property(property="email", type="string", example="john.doe@example.com"),
+     *                 @OA\Property(property="team_id", type="integer", example=1),
+     *                 @OA\Property(
+     *                     property="team",
+     *                     type="object",
+     *                     @OA\Property(property="id", type="integer", example=1),
+     *                     @OA\Property(property="uuid", type="string", example="123e4567-e89b-12d3-a456-426614174000"),
+     *                     @OA\Property(property="name", type="string", example="Manchester United"),
+     *                     @OA\Property(property="balance", type="number", format="float", example=5000000.00),
+     *                     @OA\Property(property="country_id", type="integer", example=1),
+     *                     @OA\Property(
+     *                         property="country",
+     *                         type="object",
+     *                         @OA\Property(property="id", type="integer", example=1),
+     *                         @OA\Property(property="name", type="string", example="England"),
+     *                         @OA\Property(property="code", type="string", example="EN")
+     *                     ),
+     *                     @OA\Property(property="created_at", type="string", format="date-time", example="2024-01-15T10:30:00.000000Z"),
+     *                     @OA\Property(property="updated_at", type="string", format="date-time", example="2024-01-15T10:30:00.000000Z")
+     *                 ),
+     *                 @OA\Property(property="email_verified_at", type="string", format="date-time", nullable=true, example=null),
+     *                 @OA\Property(property="created_at", type="string", format="date-time", example="2024-01-15T10:30:00.000000Z"),
+     *                 @OA\Property(property="updated_at", type="string", format="date-time", example="2024-01-15T10:30:00.000000Z")
+     *             )
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized - Invalid or missing authentication token",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Unauthenticated"),
+     *             @OA\Property(property="errors", type="array", @OA\Items(type="string"))
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=500,
+     *         description="Internal server error",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Internal server error"),
+     *             @OA\Property(property="errors", type="array", @OA\Items(type="string"))
+     *         )
+     *     )
+     * )
+     */
+    public function me(): JsonResponse
+    {
+        try {
+            $user = auth()->user();
+
+            if (! $user) {
+                return $this->errorResponse('messages.auth.unauthenticated', [], 401);
+            }
+
+            // Load team with country relationship
+            $user->load(['team.country']);
+
+            return $this->successResponse(
+                new UserResource($user),
+                'messages.user.info_retrieved_successfully'
+            );
+
+        } catch (\Exception $e) {
+            \Log::error('Get user info failed: '.$e->getMessage(), [
+                'user_id' => auth()->id(),
+                'error' => $e->getMessage(),
+            ]);
+
+            return $this->errorResponse('messages.general.error', [], 500);
         }
     }
 }

@@ -35,6 +35,9 @@ return [
         'not_owned' => 'You can only update your own team',
         'update_failed' => 'Failed to update team',
     ],
+    'user' => [
+        'info_retrieved_successfully' => 'User information retrieved successfully',
+    ],
     'general' => [
         'error' => 'Internal server error',
     ],

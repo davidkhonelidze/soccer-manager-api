@@ -82,7 +82,7 @@ The application follows a clean architecture pattern with clear separation of co
 - **storable_events**: Event sourcing event storage
 
 #### Key Relationships
-- Users belong to Teams (one-to-many)
+- Users belong to Teams (many-to-one)
 - Teams have many Players (one-to-many)
 - Players belong to Countries (many-to-one)
 - Transfer Listings reference Players and Teams
@@ -106,6 +106,7 @@ The application follows a clean architecture pattern with clear separation of co
 #### Authentication
 - `POST /api/register` - User registration
 - `POST /api/login` - User authentication
+- `GET /api/me` - Get current user information with team details
 
 #### Teams
 - `PUT /api/teams/{team}` - Update team information

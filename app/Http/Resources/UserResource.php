@@ -18,7 +18,27 @@ class UserResource extends JsonResource
             'id' => $this->id,
             'name' => $this->name,
             'email' => $this->email,
+            'team_id' => $this->team_id,
+            'team' => $this->whenLoaded('team', function () {
+                return [
+                    'id' => $this->team->id,
+                    'uuid' => $this->team->uuid,
+                    'name' => $this->team->name,
+                    'balance' => $this->team->balance,
+                    'country_id' => $this->team->country_id,
+                    'country' => $this->when($this->team->relationLoaded('country'), function () {
+                        return [
+                            'id' => $this->team->country->id,
+                            'name' => $this->team->country->name,
+                            'code' => $this->team->country->code,
+                        ];
+                    }),
+                    'created_at' => $this->team->created_at,
+                    'updated_at' => $this->team->updated_at,
+                ];
+            }),
             'created_at' => $this->created_at,
+            'updated_at' => $this->updated_at,
         ];
     }
 }
