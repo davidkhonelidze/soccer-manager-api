@@ -4,16 +4,16 @@ return [
     'team' => [
         'positions' => [
             'goalkeeper' => [
-                'default_count' => 3,
+                'default_count' => (int) env('SOCCER_POSITION_GOALKEEPER_COUNT', 3),
             ],
             'defender' => [
-                'default_count' => 6,
+                'default_count' => (int) env('SOCCER_POSITION_DEFENDER_COUNT', 6),
             ],
             'midfielder' => [
-                'default_count' => 6,
+                'default_count' => (int) env('SOCCER_POSITION_MIDFIELDER_COUNT', 6),
             ],
             'attacker' => [
-                'default_count' => 5,
+                'default_count' => (int) env('SOCCER_POSITION_ATTACKER_COUNT', 5),
             ],
         ],
         'initial_balance' => env('SOCCER_TEAM_INITIAL_BALANCE', 5000000),

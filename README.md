@@ -155,6 +155,12 @@ SOCCER_PLAYER_INITIAL_VALUE=1000000
 SOCCER_PLAYER_VALUE_INCREASE_MIN=10
 SOCCER_PLAYER_VALUE_INCREASE_MAX=100
 
+# Player position counts (per team)
+SOCCER_POSITION_GOALKEEPER_COUNT=3
+SOCCER_POSITION_DEFENDER_COUNT=6
+SOCCER_POSITION_MIDFIELDER_COUNT=6
+SOCCER_POSITION_ATTACKER_COUNT=5
+
 # Pagination
 SOCCER_TRANSFER_LISTINGS_PER_PAGE=15
 SOCCER_PLAYERS_PER_PAGE=20
@@ -162,9 +168,10 @@ SOCCER_MAX_PER_PAGE=100
 ```
 
 #### Custom Configuration (`config/soccer.php`)
-- Team settings (initial balance, player positions)
+- Team settings (initial balance, player position counts)
 - Player settings (initial value, value increase ranges)
 - Pagination settings for different endpoints
+- Configurable player position counts per team
 
 ### Testing Strategy
 
