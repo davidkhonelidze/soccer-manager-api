@@ -27,6 +27,7 @@ return [
     ],
     'pagination' => [
         'transfer_listings_per_page' => env('SOCCER_TRANSFER_LISTINGS_PER_PAGE', 15),
+        'players_per_page' => env('SOCCER_PLAYERS_PER_PAGE', 20),
         'max_per_page' => env('SOCCER_MAX_PER_PAGE', 100),
     ],
 ];

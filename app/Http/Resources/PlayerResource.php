@@ -31,6 +31,13 @@ class PlayerResource extends JsonResource
                     'code' => $this->country->code,
                 ];
             }),
+            'team' => $this->whenLoaded('team', function () {
+                return [
+                    'id' => $this->team->id,
+                    'name' => $this->team->name,
+                    'uuid' => $this->team->uuid,
+                ];
+            }),
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

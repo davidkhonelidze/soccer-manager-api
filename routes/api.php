@@ -20,6 +20,7 @@ Route::get('/countries', [CountryController::class, 'index']);
 Route::get('/transfer-listings', [TransferListingController::class, 'index']);
 
 Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/players', [PlayerController::class, 'index']);
     Route::post('/transfer-listings', [TransferListingController::class, 'store']);
     Route::post('/transfer/purchase/{player}', [TransferController::class, 'purchasePlayer']);
     Route::put('/players/{player}', [PlayerController::class, 'update']);

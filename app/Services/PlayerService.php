@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Player;
 use App\Repositories\Interfaces\PlayerRepositoryInterface;
 use App\Services\Interfaces\PlayerServiceInterface;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class PlayerService implements PlayerServiceInterface
 {
@@ -42,5 +43,10 @@ class PlayerService implements PlayerServiceInterface
         }
 
         return $this->repository->find($playerId);
+    }
+
+    public function getPaginatedPlayers(array $filters = []): LengthAwarePaginator
+    {
+        return $this->repository->paginate($filters);
     }
 }

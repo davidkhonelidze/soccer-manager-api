@@ -22,6 +22,8 @@ return [
         'no_team' => 'You must be assigned to a team to update players',
         'not_owned' => 'You can only update players from your own team',
         'update_failed' => 'Failed to update player',
+        'list_retrieved_successfully' => 'Players retrieved successfully',
+        'list_failed' => 'Failed to retrieve players',
     ],
     'general' => [
         'error' => 'Internal server error',

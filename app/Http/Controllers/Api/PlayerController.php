@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\PlayerListingRequest;
 use App\Http\Requests\UpdatePlayerRequest;
 use App\Http\Resources\PlayerResource;
 use App\Services\Interfaces\PlayerAuthorizationServiceInterface;
@@ -18,6 +19,132 @@ class PlayerController extends Controller
         private PlayerServiceInterface $playerService,
         private PlayerAuthorizationServiceInterface $authorizationService
     ) {}
+
+    /**
+     * @OA\Get(
+     *     path="/api/players",
+     *     summary="Get Players List",
+     *     description="Get a paginated list of players with optional team filtering",
+     *     operationId="getPlayers",
+     *     tags={"Players"},
+     *     security={{"sanctum":{}}},
+     *
+     *     @OA\Parameter(ref="#/components/parameters/Accept-Language"),
+     *     @OA\Parameter(
+     *         name="team_id",
+     *         in="query",
+     *         description="Filter players by team ID",
+     *         required=false,
+     *
+     *         @OA\Schema(
+     *             type="integer",
+     *             example=1
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=200,
+     *         description="Players retrieved successfully",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="success", type="boolean", example=true),
+     *             @OA\Property(property="message", type="string", example="Players retrieved successfully"),
+     *             @OA\Property(
+     *                 property="data",
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="data",
+     *                     type="array",
+     *
+     *                     @OA\Items(
+     *
+     *                         @OA\Property(property="id", type="integer", example=1),
+     *                         @OA\Property(property="first_name", type="string", example="John"),
+     *                         @OA\Property(property="last_name", type="string", example="Doe"),
+     *                         @OA\Property(property="date_of_birth", type="string", format="date", example="2000-01-01"),
+     *                         @OA\Property(property="position", type="string", example="attacker"),
+     *                         @OA\Property(property="age", type="integer", example=24),
+     *                         @OA\Property(property="value", type="number", format="float", example=1000000.50),
+     *                         @OA\Property(property="team_id", type="integer", example=1),
+     *                         @OA\Property(property="country_id", type="integer", example=1),
+     *                         @OA\Property(
+     *                             property="country",
+     *                             type="object",
+     *                             @OA\Property(property="id", type="integer", example=1),
+     *                             @OA\Property(property="name", type="string", example="United States"),
+     *                             @OA\Property(property="code", type="string", example="US")
+     *                         ),
+     *                         @OA\Property(
+     *                             property="team",
+     *                             type="object",
+     *                             @OA\Property(property="id", type="integer", example=1),
+     *                             @OA\Property(property="name", type="string", example="Team FC"),
+     *                             @OA\Property(property="uuid", type="string", example="123e4567-e89b-12d3-a456-426614174000")
+     *                         )
+     *                     )
+     *                 ),
+     *                 @OA\Property(property="current_page", type="integer", example=1),
+     *                 @OA\Property(property="last_page", type="integer", example=5),
+     *                 @OA\Property(property="per_page", type="integer", example=20),
+     *                 @OA\Property(property="total", type="integer", example=100),
+     *                 @OA\Property(property="from", type="integer", example=1),
+     *                 @OA\Property(property="to", type="integer", example=20)
+     *             )
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=401,
+     *         description="Unauthorized - Invalid or missing authentication token",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="Unauthenticated"),
+     *             @OA\Property(property="errors", type="array", @OA\Items(type="string"))
+     *         )
+     *     ),
+     *
+     *     @OA\Response(
+     *         response=422,
+     *         description="Validation error",
+     *
+     *         @OA\JsonContent(
+     *
+     *             @OA\Property(property="success", type="boolean", example=false),
+     *             @OA\Property(property="message", type="string", example="The given data was invalid"),
+     *             @OA\Property(
+     *                 property="errors",
+     *                 type="object",
+     *                 @OA\Property(
+     *                     property="team_id",
+     *                     type="array",
+     *
+     *                     @OA\Items(type="string", example="The team_id must be an integer.")
+     *                 )
+     *             )
+     *         )
+     *     )
+     * )
+     */
+    public function index(PlayerListingRequest $request)
+    {
+        try {
+            $validatedData = $request->validated();
+            $players = $this->playerService->getPaginatedPlayers($validatedData);
+
+            return PlayerResource::collection($players);
+
+        } catch (\Exception $e) {
+            \Log::error('Players listing failed: '.$e->getMessage(), [
+                'filters' => $request->validated(),
+                'error' => $e->getMessage(),
+            ]);
+
+            return $this->errorResponse('messages.player.list_failed', [], 500);
+        }
+    }
 
     /**
      * @OA\Put(
