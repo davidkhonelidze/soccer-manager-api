@@ -2,6 +2,7 @@
 
 namespace App\Aggregates;
 
+use App\Enums\TransferStatus;
 use App\Models\Player;
 use App\Models\Team;
 use App\Models\TransferListing;
@@ -49,7 +50,7 @@ class TransferAggregate extends AggregateRoot
         // Note: At this point, the transfer listing should already be marked as 'processing'
         // by the service layer to prevent race conditions
         $transferListing = TransferListing::where('player_id', $playerId)
-            ->whereIn('status', ['active', 'processing'])
+            ->whereIn('status', TransferStatus::inProgress())
             ->first();
 
         if (! $transferListing) {

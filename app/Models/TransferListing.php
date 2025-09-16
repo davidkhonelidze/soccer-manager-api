@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\TransferStatus;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
@@ -17,6 +18,7 @@ class TransferListing extends Model
 
     protected $casts = [
         'asking_price' => 'decimal:2',
+        'status' => TransferStatus::class,
     ];
 
     public function player(): BelongsTo

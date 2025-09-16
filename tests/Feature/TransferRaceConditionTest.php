@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\TransferStatus;
 use App\Models\Player;
 use App\Models\Team;
 use App\Models\TransferListing;
@@ -30,7 +31,7 @@ beforeEach(function () {
         'player_id' => $this->player->id,
         'selling_team_id' => $this->team1->id,
         'asking_price' => 1000000,
-        'status' => 'active',
+        'status' => TransferStatus::ACTIVE,
         'unique_key' => 'active',
     ]);
 
@@ -78,7 +79,7 @@ describe('Transfer Race Condition Protection', function () {
 
         // Verify the transfer listing is marked as sold
         $this->transferListing->refresh();
-        expect($this->transferListing->status)->toBe('sold');
+        expect($this->transferListing->status)->toBe(TransferStatus::SOLD);
 
         // Verify the player belongs to the buying team
         $this->player->refresh();
@@ -91,7 +92,7 @@ describe('Transfer Race Condition Protection', function () {
 
         // First, mark the listing as processing to simulate another request already processing it
         $this->transferListing->update([
-            'status' => 'processing',
+            'status' => TransferStatus::PROCESSING,
             'unique_key' => null,
         ]);
 
@@ -114,7 +115,7 @@ describe('Transfer Race Condition Protection', function () {
         // Start a transaction and acquire a lock
         DB::transaction(function () use (&$lockAcquired, &$lockReleased) {
             $lockedListing = TransferListing::where('player_id', $this->player->id)
-                ->where('status', 'active')
+                ->where('status', TransferStatus::ACTIVE)
                 ->lockForUpdate()
                 ->first();
 
@@ -162,14 +163,14 @@ describe('Transfer Race Condition Protection', function () {
         // Verify the transfer listing remains in active status due to automatic rollback
         // The database transaction rollback automatically reverts all changes
         $this->transferListing->refresh();
-        expect($this->transferListing->status)->toBe('active');
+        expect($this->transferListing->status)->toBe(TransferStatus::ACTIVE);
         expect($this->transferListing->unique_key)->toBe('active');
     });
 
     it('prevents purchase when player is already being processed', function () {
         // Mark the transfer listing as processing
         $this->transferListing->update([
-            'status' => 'processing',
+            'status' => TransferStatus::PROCESSING,
             'unique_key' => null,
         ]);
 
@@ -203,14 +204,14 @@ describe('Transfer Race Condition Protection', function () {
 
         // Verify the transfer listing is sold
         $this->transferListing->refresh();
-        expect($this->transferListing->status)->toBe('sold');
+        expect($this->transferListing->status)->toBe(TransferStatus::SOLD);
     });
 
     it('verifies unified transaction handles failures correctly', function () {
         // Test that the unified transaction properly handles failures with automatic rollback
 
         // First, verify the initial state
-        expect($this->transferListing->status)->toBe('active');
+        expect($this->transferListing->status)->toBe(TransferStatus::ACTIVE);
 
         // Mock the TransferAggregate to fail during persist()
         $this->mock(\App\Aggregates\TransferAggregate::class, function ($mock) {
@@ -236,7 +237,7 @@ describe('Transfer Race Condition Protection', function () {
         // Verify the transfer listing remains in active status due to automatic rollback
         // The unified transaction ensures all changes are rolled back together
         $this->transferListing->refresh();
-        expect($this->transferListing->status)->toBe('active');
+        expect($this->transferListing->status)->toBe(TransferStatus::ACTIVE);
         expect($this->transferListing->unique_key)->toBe('active');
     });
 });

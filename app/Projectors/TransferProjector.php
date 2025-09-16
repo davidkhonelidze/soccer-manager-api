@@ -2,6 +2,7 @@
 
 namespace App\Projectors;
 
+use App\Enums\TransferStatus;
 use App\Models\Player;
 use App\Models\Team;
 use App\Models\TransferListing;
@@ -54,9 +55,9 @@ class TransferProjector extends Projector
         // Update transfer listing status to 'sold'
         // Handle both 'active' and 'processing' statuses for race condition safety
         TransferListing::where('player_id', $event->playerId)
-            ->whereIn('status', ['active', 'processing'])
+            ->whereIn('status', TransferStatus::inProgress())
             ->update([
-                'status' => 'sold',
+                'status' => TransferStatus::SOLD,
                 'unique_key' => null,
             ]);
     }

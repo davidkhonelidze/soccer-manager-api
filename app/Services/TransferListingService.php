@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Enums\TransferStatus;
 use App\Models\Player;
 use App\Models\TransferListing;
 use App\Repositories\Interfaces\TransferListingRepositoryInterface;
@@ -39,8 +40,8 @@ class TransferListingService implements TransferListingServiceInterface
                 'player_id' => $playerId,
                 'selling_team_id' => $teamId,
                 'asking_price' => $askingPrice,
-                'status' => 'active',
-                'unique_key' => 'active',
+                'status' => TransferStatus::ACTIVE,
+                'unique_key' => TransferStatus::ACTIVE->value,
             ];
 
             return $this->transferListingRepository->create($listingData);

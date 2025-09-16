@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\TransferStatus;
 use App\Models\Player;
 use App\Models\Team;
 use App\Models\TransferListing;
@@ -33,8 +34,8 @@ beforeEach(function () {
         'player_id' => $this->player->id,
         'selling_team_id' => $this->team1->id,
         'asking_price' => 1500000,
-        'status' => 'active',
-        'unique_key' => 'active',
+        'status' => TransferStatus::ACTIVE,
+        'unique_key' => TransferStatus::ACTIVE->value,
     ]);
 
     // Set team balances
@@ -83,7 +84,7 @@ describe('Player Value Increase on Transfer', function () {
 
         // Verify transfer listing status
         $this->transferListing->refresh();
-        expect($this->transferListing->status)->toBe('sold');
+        expect($this->transferListing->status)->toBe(TransferStatus::SOLD);
         expect($this->transferListing->unique_key)->toBeNull();
     });
 

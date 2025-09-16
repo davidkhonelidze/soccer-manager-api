@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Enums\TransferStatus;
 use App\Models\TransferListing;
 use App\Repositories\Interfaces\TransferListingRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -21,7 +22,7 @@ class TransferListingRepository implements TransferListingRepositoryInterface
     {
         return $this->model
             ->where('player_id', $playerId)
-            ->where('status', 'active')
+            ->where('status', TransferStatus::ACTIVE)
             ->first();
     }
 
@@ -31,7 +32,7 @@ class TransferListingRepository implements TransferListingRepositoryInterface
 
         return $this->model
             ->with(['player', 'sellingTeam'])
-            ->where('status', 'active')
+            ->where('status', TransferStatus::ACTIVE)
             ->whereNotNull('unique_key')
             ->orderBy('created_at', 'desc')
             ->paginate($perPage);

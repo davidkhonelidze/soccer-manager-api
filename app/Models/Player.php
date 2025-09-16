@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\TransferStatus;
 use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
@@ -49,6 +50,6 @@ class Player extends Model
 
     public function activeTransferListing()
     {
-        return $this->hasOne(TransferListing::class)->where('status', 'active');
+        return $this->hasOne(TransferListing::class)->where('status', TransferStatus::ACTIVE);
     }
 }

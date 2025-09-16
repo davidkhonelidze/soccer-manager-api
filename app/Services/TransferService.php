@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Aggregates\TransferAggregate;
+use App\Enums\TransferStatus;
 use App\Models\TransferListing;
 use App\Services\Interfaces\PlayerServiceInterface;
 use App\Services\Interfaces\TeamServiceInterface;
@@ -22,7 +23,7 @@ class TransferService implements TransferServiceInterface
         return DB::transaction(function () use ($playerId, $buyerTeamUuid) {
             // Lock the transfer listing row to prevent concurrent access
             $transferListing = TransferListing::where('player_id', $playerId)
-                ->where('status', 'active')
+                ->where('status', TransferStatus::ACTIVE)
                 ->lockForUpdate()
                 ->first();
 
@@ -33,7 +34,7 @@ class TransferService implements TransferServiceInterface
             $transferFee = $transferListing->asking_price;
 
             $transferListing->update([
-                'status' => 'processing',
+                'status' => TransferStatus::PROCESSING,
                 'unique_key' => null, // Clear unique key to prevent conflicts
             ]);
 

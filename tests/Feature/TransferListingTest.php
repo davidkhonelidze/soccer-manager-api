@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\TransferStatus;
 use App\Models\Player;
 use App\Models\Team;
 use App\Models\TransferListing;
@@ -70,14 +71,14 @@ describe('Player Transfer Listing Tests', function () {
             'player_id' => $this->player->id,
             'selling_team_id' => $this->team->id,
             'asking_price' => '1000000.50',
-            'status' => 'active',
+            'status' => TransferStatus::ACTIVE,
             'unique_key' => 'active',
         ]);
 
         // Verify the player is now listed for transfer
         $transferListing = TransferListing::where('player_id', $this->player->id)->first();
         expect($transferListing)->not->toBeNull();
-        expect($transferListing->status)->toBe('active');
+        expect($transferListing->status)->toBe(TransferStatus::ACTIVE);
         expect($transferListing->selling_team_id)->toBe($this->team->id);
     });
 
@@ -239,7 +240,7 @@ describe('Player Transfer Listing Tests', function () {
         $response->assertStatus(201);
 
         $transferListing = TransferListing::where('player_id', $this->player->id)->first();
-        expect($transferListing->status)->toBe('active');
+        expect($transferListing->status)->toBe(TransferStatus::ACTIVE);
         expect($transferListing->unique_key)->toBe('active');
     });
 
@@ -263,12 +264,12 @@ describe('Player Transfer Listing Tests', function () {
         // Verify both listings exist
         $this->assertDatabaseHas('transfer_listings', [
             'player_id' => $this->player->id,
-            'status' => 'active',
+            'status' => TransferStatus::ACTIVE,
         ]);
 
         $this->assertDatabaseHas('transfer_listings', [
             'player_id' => $this->anotherPlayer->id,
-            'status' => 'active',
+            'status' => TransferStatus::ACTIVE,
         ]);
 
         // Verify total listings count
@@ -315,7 +316,7 @@ describe('Transfer Listing Display/Retrieval Tests', function () {
             'player_id' => $this->player1->id,
             'selling_team_id' => $this->team1->id,
             'asking_price' => 1000000,
-            'status' => 'active',
+            'status' => TransferStatus::ACTIVE,
             'unique_key' => 'active',
         ]);
 
@@ -323,7 +324,7 @@ describe('Transfer Listing Display/Retrieval Tests', function () {
             'player_id' => $this->player2->id,
             'selling_team_id' => $this->team2->id,
             'asking_price' => 1500000,
-            'status' => 'active',
+            'status' => TransferStatus::ACTIVE,
             'unique_key' => 'active',
         ]);
 
@@ -331,7 +332,7 @@ describe('Transfer Listing Display/Retrieval Tests', function () {
             'player_id' => $this->player3->id,
             'selling_team_id' => $this->team1->id,
             'asking_price' => 800000,
-            'status' => 'active',
+            'status' => TransferStatus::ACTIVE,
             'unique_key' => 'active',
         ]);
     });
@@ -376,7 +377,7 @@ describe('Transfer Listing Display/Retrieval Tests', function () {
             'player_id' => Player::factory()->create(['team_id' => $this->team1->id])->id,
             'selling_team_id' => $this->team1->id,
             'asking_price' => 2000000,
-            'status' => 'sold',
+            'status' => TransferStatus::SOLD,
             'unique_key' => null,
         ]);
 
@@ -385,7 +386,7 @@ describe('Transfer Listing Display/Retrieval Tests', function () {
             'player_id' => Player::factory()->create(['team_id' => $this->team1->id])->id,
             'selling_team_id' => $this->team1->id,
             'asking_price' => 2000000,
-            'status' => 'canceled',
+            'status' => TransferStatus::CANCELED,
             'unique_key' => null,
         ]);
 
@@ -399,7 +400,7 @@ describe('Transfer Listing Display/Retrieval Tests', function () {
 
         // Verify all returned listings are active
         foreach ($responseData['data'] as $listing) {
-            expect($listing['status'])->toBe('active');
+            expect($listing['status'])->toBe(TransferStatus::ACTIVE->value);
         }
     });
 
@@ -415,7 +416,7 @@ describe('Transfer Listing Display/Retrieval Tests', function () {
                 'player_id' => $player->id,
                 'selling_team_id' => $this->team1->id,
                 'asking_price' => 1000000 + ($i * 100000),
-                'status' => 'active',
+                'status' => TransferStatus::ACTIVE,
                 'unique_key' => 'active',
             ]);
         }
@@ -532,7 +533,7 @@ describe('Transfer Listing Display/Retrieval Tests', function () {
     it('does not show delisted players in listings', function () {
         // Cancel one of the listings
         $this->listing1->update([
-            'status' => 'canceled',
+            'status' => TransferStatus::CANCELED,
             'unique_key' => null,
         ]);
 
@@ -635,7 +636,7 @@ describe('Transfer Listing Edge Cases and Error Handling', function () {
         // Verify the listing was created atomically
         $this->assertDatabaseHas('transfer_listings', [
             'player_id' => $this->player->id,
-            'status' => 'active',
+            'status' => TransferStatus::ACTIVE,
         ]);
     });
 
