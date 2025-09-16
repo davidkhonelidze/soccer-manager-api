@@ -75,7 +75,7 @@ The application follows a clean architecture pattern with clear separation of co
 
 #### Core Tables
 - **users**: User accounts with team assignments
-- **teams**: Soccer teams with balance and country information
+- **teams**: Soccer teams with balance, value (sum of players), and country information
 - **players**: Player information with team assignments and values
 - **countries**: Country reference data
 - **transfer_listings**: Active transfer market listings

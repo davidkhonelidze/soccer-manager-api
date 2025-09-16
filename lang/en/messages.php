@@ -37,6 +37,7 @@ return [
     ],
     'user' => [
         'info_retrieved_successfully' => 'User information retrieved successfully',
+        'not_found' => 'User not found',
     ],
     'general' => [
         'error' => 'Internal server error',

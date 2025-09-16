@@ -11,4 +11,6 @@ interface UserRepositoryinterface
     public function findByEmail(string $email): ?User;
 
     public function find(int $id): ?User;
+
+    public function findWithTeamData(int $id): ?User;
 }

@@ -25,6 +25,7 @@ class UserResource extends JsonResource
                     'uuid' => $this->team->uuid,
                     'name' => $this->team->name,
                     'balance' => $this->team->balance,
+                    'value' => (float) ($this->team->players_sum_value ?? 0),
                     'country_id' => $this->team->country_id,
                     'country' => $this->when($this->team->relationLoaded('country'), function () {
                         return [

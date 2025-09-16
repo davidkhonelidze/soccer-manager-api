@@ -25,4 +25,14 @@ class UserRepository implements UserRepositoryinterface
     {
         return $this->model->find($id);
     }
+
+    public function findWithTeamData(int $id): ?User
+    {
+        return $this->model->with([
+            'team' => function ($query) {
+                $query->with('country')
+                    ->withSum('players', 'value');
+            },
+        ])->find($id);
+    }
 }

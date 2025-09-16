@@ -324,6 +324,7 @@ class AuthController extends Controller
      *                     @OA\Property(property="uuid", type="string", example="123e4567-e89b-12d3-a456-426614174000"),
      *                     @OA\Property(property="name", type="string", example="Manchester United"),
      *                     @OA\Property(property="balance", type="number", format="float", example=5000000.00),
+     *                     @OA\Property(property="value", type="number", format="float", example=15000000.00, description="Total value of all team players"),
      *                     @OA\Property(property="country_id", type="integer", example=1),
      *                     @OA\Property(
      *                         property="country",
@@ -376,11 +377,14 @@ class AuthController extends Controller
                 return $this->errorResponse('messages.auth.unauthenticated', [], 401);
             }
 
-            // Load team with country relationship
-            $user->load(['team.country']);
+            $userWithTeam = $this->userService->getCurrentUserWithTeam($user->id);
+
+            if (! $userWithTeam) {
+                return $this->errorResponse('messages.user.not_found', [], 404);
+            }
 
             return $this->successResponse(
-                new UserResource($user),
+                new UserResource($userWithTeam),
                 'messages.user.info_retrieved_successfully'
             );
 

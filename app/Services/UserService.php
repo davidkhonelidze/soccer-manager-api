@@ -56,4 +56,9 @@ class UserService implements UserServiceInterface
     {
         return $this->repository->find($id);
     }
+
+    public function getCurrentUserWithTeam(int $userId): ?User
+    {
+        return $this->repository->findWithTeamData($userId);
+    }
 }

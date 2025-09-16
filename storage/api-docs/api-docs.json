@@ -441,6 +441,12 @@
                                                             "format": "float",
                                                             "example": 5000000
                                                         },
+                                                        "value": {
+                                                            "description": "Total value of all team players",
+                                                            "type": "number",
+                                                            "format": "float",
+                                                            "example": 15000000
+                                                        },
                                                         "country_id": {
                                                             "type": "integer",
                                                             "example": 1

@@ -15,6 +15,7 @@ class Team extends Model
     protected $casts = [
         'balance' => 'decimal:2',
         'uuid' => 'string',
+        'players_sum_value' => 'decimal:2',
     ];
 
     public function players()
@@ -25,6 +26,11 @@ class Team extends Model
     public function users()
     {
         return $this->hasMany(User::class);
+    }
+
+    public function country()
+    {
+        return $this->belongsTo(Country::class);
     }
 
     protected static function boot()

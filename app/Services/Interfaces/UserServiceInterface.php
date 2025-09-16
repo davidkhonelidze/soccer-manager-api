@@ -11,4 +11,6 @@ interface UserServiceInterface
     public function login(string $email, string $password): array;
 
     public function find(int $id): ?User;
+
+    public function getCurrentUserWithTeam(int $userId): ?User;
 }
