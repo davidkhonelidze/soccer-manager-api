@@ -11,4 +11,6 @@ interface TeamRepositoryInterface
     public function find(int $id): ?Team;
 
     public function findByUuid(string $uuid): ?Team;
+
+    public function update(int $id, array $data): bool;
 }

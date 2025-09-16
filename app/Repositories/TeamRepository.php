@@ -25,4 +25,15 @@ class TeamRepository implements TeamRepositoryInterface
     {
         return $this->model->findByUuid($uuid);
     }
+
+    public function update(int $id, array $data): bool
+    {
+        $team = $this->model->find($id);
+
+        if (! $team) {
+            return false;
+        }
+
+        return $team->update($data);
+    }
 }

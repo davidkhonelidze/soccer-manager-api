@@ -37,6 +37,7 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->bind(TeamServiceInterface::class, TeamService::class);
         $this->app->bind(PlayerServiceInterface::class, PlayerService::class);
         $this->app->bind(PlayerAuthorizationServiceInterface::class, PlayerAuthorizationService::class);
+        $this->app->bind(\App\Services\Interfaces\TeamAuthorizationServiceInterface::class, \App\Services\TeamAuthorizationService::class);
         $this->app->bind(TransferListingServiceInterface::class, TransferListingService::class);
         $this->app->bind(TransferServiceInterface::class, TransferService::class);
 

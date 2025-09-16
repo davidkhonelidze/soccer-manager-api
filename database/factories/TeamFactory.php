@@ -22,6 +22,7 @@ class TeamFactory extends Factory
         return [
             'name' => $this->faker->unique()->word() . ' ' . $this->faker->randomElement($suffixes),
             'country_id' => $this->faker->randomElement($countries),
+            'balance' => config('soccer.team.initial_balance', 5000000),
         ];
     }
 }

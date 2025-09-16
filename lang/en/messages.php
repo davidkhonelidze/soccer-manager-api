@@ -9,6 +9,9 @@ return [
         'success' => 'Login successful',
         'invalid_credentials' => 'Invalid credentials',
     ],
+    'auth' => [
+        'unauthenticated' => 'Unauthenticated',
+    ],
     'transfer' => [
         'listed_successfully' => 'Player listed for transfer successfully',
         'player_not_found' => 'Player not found or does not belong to your team',
@@ -24,6 +27,13 @@ return [
         'update_failed' => 'Failed to update player',
         'list_retrieved_successfully' => 'Players retrieved successfully',
         'list_failed' => 'Failed to retrieve players',
+    ],
+    'team' => [
+        'updated_successfully' => 'Team updated successfully',
+        'not_found' => 'Team not found',
+        'no_team' => 'You must be assigned to a team to update team information',
+        'not_owned' => 'You can only update your own team',
+        'update_failed' => 'Failed to update team',
     ],
     'general' => [
         'error' => 'Internal server error',

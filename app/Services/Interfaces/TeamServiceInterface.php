@@ -13,4 +13,6 @@ interface TeamServiceInterface
     public function find(int $id): ?Team;
 
     public function findByUuid(string $uuid): ?Team;
+
+    public function updateTeam(int $teamId, int $userId, array $data): Team;
 }

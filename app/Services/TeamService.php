@@ -48,4 +48,21 @@ class TeamService implements TeamServiceInterface
     {
         return $this->repository->findByUuid($uuid);
     }
+
+    public function updateTeam(int $teamId, int $userId, array $data): Team
+    {
+        $team = $this->repository->find($teamId);
+
+        if (! $team) {
+            throw new \Exception('Team not found.');
+        }
+
+        $updated = $this->repository->update($teamId, $data);
+
+        if (! $updated) {
+            throw new \Exception('Failed to update team.');
+        }
+
+        return $this->repository->find($teamId);
+    }
 }

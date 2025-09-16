@@ -12,6 +12,11 @@ class Team extends Model
 
     protected $fillable = ['uuid', 'name', 'country_id', 'balance'];
 
+    protected $casts = [
+        'balance' => 'decimal:2',
+        'uuid' => 'string',
+    ];
+
     public function players()
     {
         return $this->hasMany(Player::class);
