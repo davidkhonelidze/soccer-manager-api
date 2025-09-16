@@ -2,18 +2,109 @@
 
 namespace App\Http\Requests;
 
+use App\Services\Interfaces\PlayerAuthorizationServiceInterface;
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 class UpdatePlayerRequest extends FormRequest
 {
+    private ?string $failureReason = null;
+
+    public function __construct(
+        private PlayerAuthorizationServiceInterface $playerAuthorizationService
+    ) {
+        parent::__construct();
+    }
+
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        // Always return true - we'll handle authorization in the controller
-        // This allows us to use the ApiResponse trait for consistent JSON formatting
+        $user = $this->user();
+
+        if (! $user) {
+            $this->failureReason = 'unauthenticated';
+
+            return false;
+        }
+
+        if (! $this->playerAuthorizationService->userHasTeam($user->id)) {
+            $this->failureReason = 'no_team';
+
+            return false;
+        }
+
+        $playerId = $this->route('player');
+
+        if (! is_numeric($playerId) || (int) $playerId <= 0) {
+            $this->failureReason = 'invalid_player_id';
+
+            return false;
+        }
+
+        $playerId = (int) $playerId;
+
+        if (! $this->playerAuthorizationService->playerExists($playerId)) {
+            $this->failureReason = 'player_not_found';
+
+            return false;
+        }
+
+        if (! $this->playerAuthorizationService->canUserUpdatePlayer($user->id, $playerId)) {
+            $this->failureReason = 'no_permission';
+
+            return false;
+        }
+
         return true;
+    }
+
+    /**
+     * Handle a failed authorization attempt.
+     */
+    protected function failedAuthorization(): void
+    {
+        switch ($this->failureReason) {
+            case 'unauthenticated':
+                throw new HttpResponseException(
+                    response()->json([
+                        'success' => false,
+                        'message' => trans('messages.auth.unauthenticated'),
+                        'errors' => [],
+                    ], 401)
+                );
+
+            case 'no_team':
+                throw new HttpResponseException(
+                    response()->json([
+                        'success' => false,
+                        'message' => trans('messages.player.no_team'),
+                        'errors' => [],
+                    ], 403)
+                );
+
+            case 'invalid_player_id':
+            case 'player_not_found':
+                throw new HttpResponseException(
+                    response()->json([
+                        'success' => false,
+                        'message' => trans('messages.player.not_found'),
+                        'errors' => [],
+                    ], 404)
+                );
+
+            case 'no_permission':
+            default:
+                throw new HttpResponseException(
+                    response()->json([
+                        'success' => false,
+                        'message' => trans('messages.player.not_owned'),
+                        'errors' => [],
+                    ], 403)
+                );
+        }
     }
 
     /**

@@ -201,10 +201,10 @@ describe('Player Update Functionality', function () {
             $response = $this->actingAs($this->user)
                 ->putJson('/api/players/99999', $updateData);
 
-            $response->assertStatus(403)
+            $response->assertStatus(404)
                 ->assertJson([
                     'success' => false,
-                    'message' => 'You can only update players from your own team',
+                    'message' => 'Player not found',
                 ]);
         });
     });

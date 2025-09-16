@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\PlayerListingRequest;
 use App\Http\Requests\UpdatePlayerRequest;
 use App\Http\Resources\PlayerResource;
-use App\Services\Interfaces\PlayerAuthorizationServiceInterface;
 use App\Services\Interfaces\PlayerServiceInterface;
 use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
@@ -16,8 +15,7 @@ class PlayerController extends Controller
     use ApiResponse;
 
     public function __construct(
-        private PlayerServiceInterface $playerService,
-        private PlayerAuthorizationServiceInterface $authorizationService
+        private PlayerServiceInterface $playerService
     ) {}
 
     /**
@@ -318,21 +316,8 @@ class PlayerController extends Controller
     public function update(UpdatePlayerRequest $request, $player): JsonResponse
     {
         try {
-            if (! is_numeric($player) || (int) $player <= 0) {
-                return $this->errorResponse('messages.player.not_found', [], 404);
-            }
-
             $playerId = (int) $player;
             $user = $request->user();
-
-            if (! $user || ! $user->team_id) {
-                return $this->errorResponse('messages.player.no_team', [], 403);
-            }
-
-            if (! $this->authorizationService->canUserUpdatePlayer($user->id, $playerId)) {
-                return $this->errorResponse('messages.player.not_owned', [], 403);
-            }
-
             $validatedData = $request->validated();
 
             $updatedPlayer = $this->playerService->updatePlayer(

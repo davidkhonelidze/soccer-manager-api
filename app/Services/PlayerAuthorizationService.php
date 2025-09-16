@@ -29,4 +29,16 @@ class PlayerAuthorizationService implements PlayerAuthorizationServiceInterface
 
         return $player->team_id === $user->team_id;
     }
+
+    public function userHasTeam(int $userId): bool
+    {
+        $user = $this->userService->find($userId);
+
+        return $user && $user->team_id !== null;
+    }
+
+    public function playerExists(int $playerId): bool
+    {
+        return $this->playerRepository->find($playerId) !== null;
+    }
 }
